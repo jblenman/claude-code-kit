@@ -1,0 +1,10 @@
+{
+  "name": "action-guard",
+  "version": "0.1.0",
+  "description": "Refuses, or asks about, actions against one web application the agent works with: writes (POST, PUT, PATCH, DELETE) unless the path allows them, protected paths with any method, requests from code whose method cannot be read, form input, JavaScript and uploads in a browser tab that is on the application, and listed tools of the application's MCP server. A PreToolUse hook on Bash, PowerShell, WebFetch and every MCP tool; the policy is a JSON file.",
+  "author": {
+    "name": "claude-code-kit"
+  },
+  "license": "MIT",
+  "keywords": ["hooks", "web-application", "policy", "guardrails"]
+}

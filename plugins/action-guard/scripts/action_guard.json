@@ -1,0 +1,23 @@
+{
+  "_about": "Policy for action-guard. Hosts are matched by suffix (app.example.com also covers api.app.example.com). Paths are prefix patterns: /admin covers /admin and everything under it, /adm* covers any path starting with /adm. Machine-local overrides go in ~/.claude/action-guard/config.json: protected_hosts, denied_paths, ask_paths and mcp_rules add up; every other value replaces. on_unreadable_method and on_unknown_target take deny, ask or ignore.",
+
+  "protected_hosts": ["app.example.com"],
+
+  "allowed_methods": ["GET", "HEAD", "OPTIONS"],
+
+  "denied_paths": ["/admin", "/api/v1/users", "/delete"],
+
+  "ask_paths": ["/api/v1/orders"],
+
+  "write_ok_paths": ["/api/v1/comments"],
+
+  "deny_browser_tools_on_protected_hosts": ["form_input", "javascript_tool", "file_upload", "shortcuts_execute"],
+
+  "ask_browser_actions_on_protected_hosts": ["left_click", "right_click", "double_click", "triple_click", "type", "key"],
+
+  "mcp_rules": [
+    {"server": "myapp", "deny_tools": ["delete_item", "purge"], "ask_tools": ["update_item", "create_item"]}
+  ],
+
+  "log": true
+}

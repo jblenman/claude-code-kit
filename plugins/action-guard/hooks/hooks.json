@@ -1,0 +1,18 @@
+{
+  "description": "action-guard: before every Bash, PowerShell, WebFetch or MCP tool call, decide whether the call would change the protected web application (policy: scripts/action_guard.json, overridden by ~/.claude/action-guard/config.json). Deny, ask, or stay silent. The command tries $KIT_PYTHON first (settings env; on Windows the path of a real python.exe, never a Store or PyManager alias), then python3, then py; the guard exits 0 whenever it started.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell|WebFetch|mcp__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${KIT_PYTHON:-python3}\" \"${CLAUDE_PLUGIN_ROOT}/scripts/action_guard.py\" hook || python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/action_guard.py\" hook || py \"${CLAUDE_PLUGIN_ROOT}/scripts/action_guard.py\" hook || exit 1",
+            "timeout": 20,
+            "statusMessage": "action-guard: checking the call..."
+          }
+        ]
+      }
+    ]
+  }
+}
