@@ -1,0 +1,9 @@
+# Scrape job for a Prometheus server on the collector host. install-collector.sh --with-prometheus
+# appends this block to /etc/prometheus/prometheus.yml (Debian/Ubuntu package) when the job is not
+# there yet. Indented for the `scrape_configs:` list of that file.
+  - job_name: otelcol-claude
+    scrape_interval: 60s
+    static_configs:
+      - targets: ['127.0.0.1:8889']
+        labels:
+          source: claude-code

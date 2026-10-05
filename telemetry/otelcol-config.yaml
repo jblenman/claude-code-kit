@@ -1,0 +1,104 @@
+# OpenTelemetry Collector (otelcol-contrib) config for Claude Code telemetry.
+# install-collector.sh copies this file to /etc/otelcol-contrib/config.yaml on the collector host.
+#
+# Design (see README.md):
+#   every machine running Claude Code  --OTLP gRPC 4317 / HTTP 4318-->  this collector
+#   metrics  -> Prometheus scrape endpoint on :8889 (a Prometheus server stores the history)
+#   events   -> rotated JSONL file under /var/lib/otelcol-contrib/events/ (one OTLP JSON batch per line)
+#
+# Component references: the fileexporter, prometheusexporter and deltatocumulativeprocessor READMEs
+# of opentelemetry-collector-contrib. Validate on the collector host with:
+#   otelcol-contrib validate --config=/etc/otelcol-contrib/config.yaml
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317      # OTEL_EXPORTER_OTLP_PROTOCOL=grpc on the machines
+      http:
+        endpoint: 0.0.0.0:4318      # or http/protobuf; Claude Code appends /v1/metrics and /v1/logs
+
+processors:
+  # First in every pipeline: refuse data before the host runs out of memory. The values suit a
+  # small host that runs other services too (a Raspberry Pi, a 1 GB VM); raise them on a bigger one,
+  # together with MemoryMax in the systemd unit (install-collector.sh).
+  memory_limiter:
+    check_interval: 5s
+    limit_mib: 256
+    spike_limit_mib: 64
+
+  # Privacy: Claude Code attaches user.email, user.account_uuid and user.account_id to every
+  # metric datapoint and event when you are signed in with a Claude account (docs: "Standard
+  # attributes"). The `machine` resource attribute already says where data came from, and the
+  # events file is plain text on disk, so the identity fields are deleted here.
+  # Remove this processor from the pipelines if you need to tell several accounts apart.
+  # user.id (random, per install) and session.id stay: they carry no personal information.
+  attributes/drop-identity:
+    actions:
+      - key: user.email
+        action: delete
+      - key: user.account_uuid
+        action: delete
+      - key: user.account_id
+        action: delete
+
+  # Claude Code exports delta temporality by default; the Prometheus exporter wants cumulative.
+  # The recommended env block sets OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=cumulative
+  # on each machine; this processor covers a machine that lacks it (cumulative input passes through).
+  # max_stale: a series is dropped from the processor's state this long after its last sample.
+  # Sessions can sit idle for hours, so keep it well above OTEL_METRIC_EXPORT_INTERVAL.
+  deltatocumulative:
+    max_stale: 12h
+
+  batch:
+    timeout: 5s
+    send_batch_size: 512
+
+exporters:
+  # Scraped by Prometheus at http://<collector-host>:8889/metrics (prometheus-scrape.yaml).
+  prometheus:
+    endpoint: 0.0.0.0:8889
+    # Keep metric names recognisable: claude_code.token.usage -> claude_code_token_usage.
+    # The default strategy would append unit and counter suffixes (claude_code_token_usage_tokens_total).
+    # On a collector older than the key, use `add_metric_suffixes: false` instead.
+    translation_strategy: UnderscoreEscapingWithoutSuffixes
+    # How long a series stays on /metrics without a new export. Finished sessions keep their final
+    # value visible for this long (a flat line), which keeps per-session "last value" queries simple.
+    metric_expiration: 12h
+    send_timestamps: false
+    # Resource attributes (service.name, service.version, os.type, host.arch) are exposed as
+    # target_info; they are not copied onto every series. The datapoints already carry `machine`
+    # because Claude Code puts OTEL_RESOURCE_ATTRIBUTES keys on each datapoint (default
+    # OTEL_METRICS_INCLUDE_RESOURCE_ATTRIBUTES=true).
+
+  # Events as JSONL. Each line is one OTLP ExportLogsServiceRequest in JSON
+  # (resourceLogs[].scopeLogs[].logRecords[]); flatten.jq turns it into one object per event.
+  file/events:
+    path: /var/lib/otelcol-contrib/events/claude-code-events.jsonl
+    format: json
+    flush_interval: 5s
+    create_directory: true
+    rotation:
+      max_megabytes: 50         # rotate at 50 MB
+      max_backups: 100          # keep up to 100 rotated files (about 5 GB ceiling)
+      max_days: 400             # and nothing older than 400 days
+      localtime: true
+
+  # Troubleshooting only: prints every record to the journal. Add to a pipeline's exporters list,
+  # restart, read with `journalctl -u otelcol-contrib -f`, then remove it again.
+  debug:
+    verbosity: detailed
+
+service:
+  telemetry:
+    logs:
+      level: info
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, deltatocumulative, attributes/drop-identity, batch]
+      exporters: [prometheus]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, attributes/drop-identity, batch]
+      exporters: [file/events]
