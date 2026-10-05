@@ -1,0 +1,29 @@
+{
+  "description": "session-guard: a tool-using turn cannot end while the session-notes file (default ~/.claude/session-notes.md, CLAUDE_SESSION_NOTES) is stale, untouched this session or missing; PreCompact records compactions. The command tries $KIT_PYTHON first (set it in the env block of settings.json; on Windows the path of a real python.exe, never a Store or PyManager alias), then python3, then py. The guard always exits 0 once started and blocks only via JSON, so it runs exactly once per event.",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${KIT_PYTHON:-python3}\" \"${CLAUDE_PLUGIN_ROOT}/scripts/session_guard.py\" stop || python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/session_guard.py\" stop || py \"${CLAUDE_PLUGIN_ROOT}/scripts/session_guard.py\" stop || exit 1",
+            "timeout": 20,
+            "statusMessage": "session-guard: checking the session notes..."
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${KIT_PYTHON:-python3}\" \"${CLAUDE_PLUGIN_ROOT}/scripts/session_guard.py\" precompact || python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/session_guard.py\" precompact || py \"${CLAUDE_PLUGIN_ROOT}/scripts/session_guard.py\" precompact || exit 1",
+            "timeout": 10,
+            "statusMessage": "session-guard: checking the session notes..."
+          }
+        ]
+      }
+    ]
+  }
+}

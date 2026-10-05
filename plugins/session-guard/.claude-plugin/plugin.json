@@ -1,0 +1,10 @@
+{
+  "name": "session-guard",
+  "version": "0.1.0",
+  "description": "Keeps a session-notes file fresh. A Stop hook blocks a turn once (with a reason telling the model what to record) when the turn used tools and the notes file is more than 30 minutes stale, untouched since the session's first turn, or missing; PreCompact records compactions so a stale file is updated right after one, and bounces a manual /compact once while the file is stale. Includes the session-notes skill.",
+  "author": {
+    "name": "claude-code-kit"
+  },
+  "license": "MIT",
+  "keywords": ["hooks", "session-notes", "compaction", "record-keeping"]
+}
