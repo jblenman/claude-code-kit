@@ -1,0 +1,30 @@
+{
+  "name": "claude-code-kit",
+  "description": "Guard hooks, tool plugins with their skills inside, research subagents, an inbox monitor and an MCP template for Claude Code.",
+  "owner": {
+    "name": "claude-code-kit"
+  },
+  "plugins": [
+    {
+      "name": "request-guard",
+      "source": "./plugins/request-guard",
+      "description": "Every request to a public website counted and spaced (PreToolUse on Bash, PowerShell, WebFetch and browser navigation; back-off on 403/429/503), plus a paced fetcher and the fetch-paced skill.",
+      "category": "guardrails",
+      "tags": ["hooks", "rate-limit", "web-requests"]
+    },
+    {
+      "name": "session-guard",
+      "source": "./plugins/session-guard",
+      "description": "Keeps a session-notes file fresh: a Stop hook blocks a tool-using turn once while the notes are stale, untouched or missing; PreCompact records compactions. Includes the session-notes skill.",
+      "category": "guardrails",
+      "tags": ["hooks", "session-notes", "compaction"]
+    },
+    {
+      "name": "action-guard",
+      "source": "./plugins/action-guard",
+      "description": "Refuses or asks about actions against one web application: writes, protected paths, browser form input and JavaScript on its pages, and listed MCP tools. Policy in a JSON file.",
+      "category": "guardrails",
+      "tags": ["hooks", "web-application", "policy"]
+    }
+  ]
+}

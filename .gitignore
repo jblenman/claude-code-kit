@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Editors and OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Scratch output from tests and proofs (the tests use the system temp dir; anything left here is a leftover)
+/tmp/
+*.log
+*.bak-*
