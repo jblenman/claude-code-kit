@@ -38,10 +38,11 @@ tools/list
 tools/call                 (when the model uses a tool)
 ```
 
-- `server/discover` is a probe for a newer protocol revision. A server that does not know it
-  answers `-32601` and the client continues with `initialize`.
+- `server/discover` came first. The docs say Claude Code 2.1.285 and later ask stdio servers
+  whether they support a newer protocol revision; this request fits that. A server that does not
+  know the method answers `-32601` and the client continues with `initialize` (seen).
 - `initialize` asked for **protocol 2025-11-25** (also on 2.1.286). Echo the requested version when
-  you support it; otherwise answer with a version you do support (the kit's servers accept
+  you support it; otherwise answer with a version you do support (the kit's template accepts
   2025-11-25, 2025-06-18, 2025-03-26 and 2024-11-05). The debug log shows the result as
   `negotiatedProtocolVersion`.
 - The docs describe two client runtimes and a newer revision (2026-07-28) that Claude Code

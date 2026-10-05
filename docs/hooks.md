@@ -21,8 +21,8 @@ docs were checked against the hooks reference on 2026-10-04.
 | Input | One JSON object on **stdin**: `session_id`, `prompt_id`, `transcript_path`, `cwd`, `permission_mode`, `hook_event_name`, plus per-event fields. `PreToolUse` adds `tool_name`, `tool_input` (Bash: `{"command": ...}`, WebFetch: `{"url": ...}`, MCP tools: their arguments) and `tool_use_id`. Inside a subagent: `agent_id` and `agent_type`. |
 | No opinion | Print nothing, exit 0. The normal permission flow decides. |
 | Decision | Print **one JSON object** on stdout and exit 0. `PreToolUse` uses `hookSpecificOutput.permissionDecision`; `Stop`, `PreCompact`, `UserPromptSubmit`, `PostToolUse` use top-level `decision: "block"` with `reason`. |
-| Notice to the user | Top-level `systemMessage` in the same JSON. Hooks have no terminal (`/dev/tty` is not available), and a successful hook's stdout and stderr go to the debug log only. |
-| Exit 2 | Blocks on events that can block, with stderr as the reason, whatever the JSON says. |
+| Notice to the user | Top-level `systemMessage` in the same JSON. Hooks have no terminal (`/dev/tty` is not available). A successful hook's stderr goes to the debug log only, and so does its stdout, except on `SessionStart` and `UserPromptSubmit` (and a few others), where plain stdout is added to the model's context. |
+| Exit 2 | Blocks on events that can block, whatever the JSON says (even an `allow`). The reason is the JSON's blocking reason when there is one, otherwise stderr. |
 | Any other non-zero exit | A non-blocking error: the action proceeds and the transcript shows `<hook> hook error` with the first line of stderr. A hook that cannot start (missing script, missing interpreter) lands here too. |
 | Timeout | `timeout` in seconds; default 600 for command hooks (30 on `UserPromptSubmit`). A timed-out `PreToolUse` command hook does not block: the call continues through the permission flow. |
 | Parallelism | All matching hooks run in parallel. For `PreToolUse` the most restrictive decision wins: deny, then defer, then ask, then allow. |
@@ -115,9 +115,11 @@ silent, so make its state visible:
 
 - Log every decision and every internal error to a file the guard owns, and give it a `status`
   command.
-- Watch the first run after installing. A hook that cannot start shows `Failed with non-blocking
-  status code: ...` in the transcript once; after that you only see it in the debug log
-  (`claude --debug-file <path>`, look for `hook_non_blocking_error` or `Permission denied`).
+- Watch the first run after installing. A hook that cannot start shows a `<hook> hook error` notice
+  with `Failed with non-blocking status code: ...` in the transcript, easy to miss in a busy session
+  and invisible in a headless run. The debug log has the full stderr
+  (`claude --debug-file <path>`, look for `hook_non_blocking_error` or `Permission denied`); read it
+  after a headless test before trusting that the guard allowed something.
 - `/hooks` in a session lists every configured hook and where it came from. With telemetry on,
   `hook_registered` events list them per machine ([../telemetry/queries.md](../telemetry/queries.md)).
 - A guard is a guardrail against an agent's mistakes, not a security boundary. Anything that must

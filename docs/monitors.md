@@ -72,7 +72,7 @@ Rules quoted from the docs were checked on 2026-10-04 (Claude Code 2.1.289).
 5. **Keep lines short and single.** Join multi-line bodies (for example with ` | `) and cut very
    long ones; say in the line where the full text can be read.
 6. **Make it switchable.** An environment variable that makes the script idle with no connection
-   lets one session opt out without disabling the plugin.
+   lets one session opt out without disabling the plugin (`inbox-monitor` reads `INBOX_LISTEN=off`).
 7. Windows: never use `os.kill(pid, 0)` to test whether a process lives, because on Windows it
    terminates the process. Use `OpenProcess` plus `GetExitCodeProcess` through `ctypes`. Write
    output as UTF-8 bytes regardless of the console code page.
