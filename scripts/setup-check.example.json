@@ -1,0 +1,35 @@
+{
+  "_about": "Example expectations for scripts/setup_check.py. Copy it, keep the keys you care about, delete the rest. Every key is optional. Values here are suggestions, not requirements of the kit.",
+
+  "settings": "~/.claude/settings.json",
+
+  "values": {
+    "permissions.defaultMode": "auto"
+  },
+
+  "allow": ["Read", "Glob", "Grep", "WebSearch", "WebFetch", "Task", "Skill"],
+
+  "allow_absent": ["Bash(*)", "Edit", "Write", "NotebookEdit"],
+
+  "enabled_plugins": [
+    "request-guard@claude-code-kit",
+    "session-guard@claude-code-kit"
+  ],
+
+  "marketplaces": ["claude-code-kit"],
+
+  "hooks_absent": [
+    {"contains": "request_guard.py", "why": "the request-guard plugin provides this hook; a copy in settings would book every request twice"},
+    {"contains": "session_guard.py", "why": "the session-guard plugin provides this hook; a copy in settings would evaluate every Stop twice"},
+    {"contains": "action_guard.py", "why": "the action-guard plugin provides this hook"}
+  ],
+
+  "env": {
+    "KIT_PYTHON": {
+      "on": ["windows"],
+      "why": "the plugins' hook and MCP commands start with ${KIT_PYTHON:-python3}; on Windows set it to the path of a real python.exe (forward slashes), never a Store or PyManager alias"
+    }
+  },
+
+  "files": ["~/.claude/session-notes.md"]
+}
