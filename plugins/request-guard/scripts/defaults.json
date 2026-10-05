@@ -1,0 +1,137 @@
+{
+  "_about": "Shipped defaults for request-guard. Machine-local overrides go in ~/.claude/request-guard/config.json (same keys; objects merge, lists add, values replace; CLAUDE_REQUEST_GUARD_CONFIG points elsewhere). Limits are per site (registrable domain) and per machine, shared by every session and subagent. Keys left empty here: deny (suffixes never contacted, e.g. [\"competitor.example\"]), never_send (terms that must never appear in a header, URL or body, e.g. an own e-mail name), sensitive_terms (terms kept out of headers, e.g. a project name), trusted_scripts (path patterns of scripts the guard does not read because they pace themselves, e.g. [\"~/tools/*.py\"]). Put personal values in the machine-local file, not here.",
+
+  "enabled": true,
+  "max_hook_wait_s": 25,
+  "total_per_hour": 1500,
+  "check_identifiers": true,
+
+  "profiles": {
+    "default": {
+      "_about": "Any public site not listed under hosts: a person's reading pace.",
+      "min_interval_s": 10, "max_per_hour": 20, "max_per_day": 50, "max_per_command": 1,
+      "backoff_codes": [403, 429, 503], "backoff_min": 60, "miss_limit": 3
+    },
+    "careful": {
+      "_about": "Sites tied to an account or quick to challenge automation: search engines, social networks.",
+      "min_interval_s": 20, "max_per_hour": 10, "max_per_day": 30, "max_per_command": 1,
+      "backoff_codes": [403, 429, 503], "backoff_min": 120, "miss_limit": 3
+    },
+    "bulk": {
+      "_about": "Public data services and large documentation sites built for programmatic or heavy reading. Conservative figures, not taken from each service's terms.",
+      "min_interval_s": 3, "max_per_hour": 300, "max_per_day": 1500, "max_per_command": 3,
+      "backoff_codes": [429], "backoff_min": 15, "miss_limit": 0
+    },
+    "archive": {
+      "_about": "The Internet Archive. Slower than bulk: on 2026-09-29 it answered 429 after about 27 requests sent 2 to 3 seconds apart.",
+      "min_interval_s": 6, "max_per_hour": 150, "max_per_day": 600, "max_per_command": 1,
+      "backoff_codes": [403, 429, 503], "backoff_min": 30, "miss_limit": 0
+    },
+    "infra": {
+      "_about": "Developer infrastructure (code hosts, package registries, the model provider). High ceiling so only a runaway loop is caught; not counted toward total_per_hour.",
+      "min_interval_s": 0, "max_per_hour": 600, "max_per_day": 5000, "max_per_command": 20,
+      "backoff_codes": [], "backoff_min": 0, "miss_limit": 0
+    }
+  },
+
+  "hosts": {
+    "_about": "suffix -> profile name, or \"private\" (never counted). Longest matching suffix wins.",
+
+    "osti.gov": "bulk",
+    "nasa.gov": "bulk",
+    "crossref.org": "bulk",
+    "openalex.org": "bulk",
+    "doi.org": "bulk",
+    "archive.org": "archive",
+    "arxiv.org": "bulk",
+    "semanticscholar.org": "bulk",
+    "nih.gov": "bulk",
+    "sec.gov": "bulk",
+    "uspto.gov": "bulk",
+    "courtlistener.com": "bulk",
+    "nrc.gov": "bulk",
+    "energy.gov": "bulk",
+    "gao.gov": "bulk",
+    "iaea.org": "bulk",
+    "govinfo.gov": "bulk",
+    "federalregister.gov": "bulk",
+    "regulations.gov": "bulk",
+    "ecfr.gov": "bulk",
+    "usgs.gov": "bulk",
+    "census.gov": "bulk",
+    "data.gov": "bulk",
+    "loc.gov": "bulk",
+    "wikipedia.org": "bulk",
+    "wikimedia.org": "bulk",
+    "wikidata.org": "bulk",
+    "iris.edu": "bulk",
+    "earthscope.org": "bulk",
+
+    "microsoft.com": "bulk",
+    "azure.com": "bulk",
+    "visualstudio.com": "bulk",
+    "powerbi.com": "bulk",
+    "apple.com": "bulk",
+    "swift.org": "bulk",
+    "python.org": "bulk",
+    "nodejs.org": "bulk",
+    "mozilla.org": "bulk",
+    "readthedocs.io": "bulk",
+    "claude.com": "bulk",
+
+    "github.com": "infra",
+    "githubusercontent.com": "infra",
+    "github.io": "bulk",
+    "pypi.org": "infra",
+    "pythonhosted.org": "infra",
+    "npmjs.org": "infra",
+    "npmjs.com": "infra",
+    "crates.io": "infra",
+    "rubygems.org": "infra",
+    "nuget.org": "infra",
+    "brew.sh": "infra",
+    "ghcr.io": "infra",
+    "docker.io": "infra",
+    "docker.com": "infra",
+    "anthropic.com": "infra",
+    "claude.ai": "infra",
+    "googleapis.com": "infra",
+    "ollama.com": "infra",
+    "huggingface.co": "infra",
+
+    "www.google.com": "careful",
+    "scholar.google.com": "careful",
+    "bing.com": "careful",
+    "duckduckgo.com": "careful",
+    "linkedin.com": "careful",
+    "facebook.com": "careful",
+    "instagram.com": "careful",
+    "x.com": "careful",
+    "twitter.com": "careful",
+    "tiktok.com": "careful",
+    "reddit.com": "careful",
+    "glassdoor.com": "careful",
+    "indeed.com": "careful"
+  },
+
+  "deny": [],
+
+  "allowed_user_agents": [
+    "Mozilla/*",
+    "curl/*",
+    "Wget/*",
+    "python-requests/*",
+    "Python-urllib/*",
+    "python-httpx/*",
+    "Go-http-client/*",
+    "node",
+    "node-fetch*",
+    "PowerShell/*",
+    "WindowsPowerShell/*"
+  ],
+
+  "sensitive_terms": [],
+  "never_send": [],
+  "trusted_scripts": [],
+  "debug": false
+}

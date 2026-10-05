@@ -1,0 +1,10 @@
+{
+  "name": "request-guard",
+  "version": "0.1.0",
+  "description": "Counts and spaces every request a session or subagent sends to a public website: a PreToolUse hook on Bash, PowerShell, WebFetch and browser navigation refuses loops, bursts, unreadable targets and invented identifiers and waits for a site's turn; PostToolUse on WebFetch starts a back-off when a site answers 403, 429 or 503. One ledger per machine. Includes a paced fetcher for batches and the fetch-paced skill.",
+  "author": {
+    "name": "claude-code-kit"
+  },
+  "license": "MIT",
+  "keywords": ["hooks", "rate-limit", "web-requests", "guardrails", "fetch"]
+}
