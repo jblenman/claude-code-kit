@@ -63,7 +63,7 @@ Tools never available to a subagent, whatever the list says: `AskUserQuestion`, 
 | Pattern | Front matter | Why |
 |---|---|---|
 | A checker that learns across runs | `memory: user`, `effort: xhigh` | Recurring mistakes and verdict counts survive between sessions. |
-| A web researcher that must pace its requests | `skills: [fetch-paced]`, `effort: high` | The pacing rules are in its context from the first step instead of being discovered late. |
+| A web researcher that must pace its requests | `skills: [request-guard:fetch-paced]`, `effort: high`, an explicit `tools` list | The pacing rules are in its context from the first step instead of being discovered late. A skill from a plugin is named `<plugin>:<skill>`; if it is missing (request-guard not installed), Claude Code skips it with a warning in the debug log and the agent still starts. |
 | An image/PDF reader that returns text only | `model: sonnet`, `omitClaudeMd: true` | Pictures stay out of the caller's context; the reader needs no project instructions. |
 | A browser reader that must not act | an explicit `tools` list plus `disallowedTools` naming the browser tools that type, upload, run JavaScript or submit | Read-only by construction, not by instruction. |
 
