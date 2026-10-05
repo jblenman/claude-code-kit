@@ -1,0 +1,10 @@
+{
+  "name": "screenshot",
+  "version": "0.1.0",
+  "description": "Screenshots and timed bursts of the screen, a monitor or the front window on macOS, Windows and Linux with the operating system's own tools, longest edge capped at 1800 px, optional change detection between frames. The skill makes Claude read the images in a subagent so they never flood the main context.",
+  "author": {
+    "name": "claude-code-kit"
+  },
+  "license": "MIT",
+  "keywords": ["screenshot", "screen-capture", "timelapse", "images", "context"]
+}

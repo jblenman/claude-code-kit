@@ -1,0 +1,10 @@
+{
+  "name": "session-forensics",
+  "version": "0.1.0",
+  "description": "Find and audit Claude Code transcripts: which session worked on something (ignoring the instructions copied into every transcript), where a session's context and tokens went (tool output, screenshots, thinking), and whether sessions keep a notes file, knowledge base and memory current without being asked. Read-only, stdlib Python.",
+  "author": {
+    "name": "claude-code-kit"
+  },
+  "license": "MIT",
+  "keywords": ["transcripts", "sessions", "tokens", "context", "audit"]
+}

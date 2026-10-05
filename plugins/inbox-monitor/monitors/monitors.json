@@ -1,0 +1,7 @@
+[
+  {
+    "name": "inbox",
+    "command": "\"${KIT_PYTHON:-python3}\" \"${CLAUDE_PLUGIN_ROOT}/scripts/listen.py\" || python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/listen.py\" || py \"${CLAUDE_PLUGIN_ROOT}/scripts/listen.py\"",
+    "description": "Inbox"
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "name": "research-agents",
+  "version": "0.1.0",
+  "description": "Four subagents for research work: researcher (paced web research, every claim with its URL, confirmed kept apart from probable), verifier (claim-by-claim check of an agent-written document against its original sources, with its own persistent memory), browser-reader (read-only page reading through Claude in Chrome) and frame-reader (images, PDF pages and keyframes in, text out).",
+  "author": {
+    "name": "claude-code-kit"
+  },
+  "license": "MIT",
+  "keywords": ["subagents", "research", "verification", "browser", "images"]
+}

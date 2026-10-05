@@ -1,0 +1,10 @@
+{
+  "name": "photos-find",
+  "version": "0.1.0",
+  "description": "Find a photo in the macOS Photos library by the words Live Text found in it (a receipt, label, serial number, sign, screenshot), optionally within dates, and read its words without opening the image. Reads Photos' own search index read-only; no export, no Photos.app. macOS only.",
+  "author": {
+    "name": "claude-code-kit"
+  },
+  "license": "MIT",
+  "keywords": ["photos", "ocr", "live-text", "search", "macos"]
+}

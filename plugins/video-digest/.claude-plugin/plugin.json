@@ -1,0 +1,10 @@
+{
+  "name": "video-digest",
+  "version": "0.1.0",
+  "description": "Read an online video without watching it: yt-dlp fetches audio and captions, whisper.cpp transcribes locally, the two transcripts are compared window by window with numeric disagreements flagged, and scene-change keyframes come with timestamps. The skill tells Claude to use it when a video link appears and how to read the report.",
+  "author": {
+    "name": "claude-code-kit"
+  },
+  "license": "MIT",
+  "keywords": ["video", "youtube", "transcript", "whisper", "fact-check"]
+}

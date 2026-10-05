@@ -1,0 +1,10 @@
+{
+  "name": "docx-pages",
+  "version": "0.1.0",
+  "description": "Page counts for Word documents from a real LibreOffice render instead of word or line estimates, with a --limit check that never passes on an unknown count. Measurement only: the document is never edited. The skill tells Claude to measure before answering any page-count question.",
+  "author": {
+    "name": "claude-code-kit"
+  },
+  "license": "MIT",
+  "keywords": ["docx", "word", "page-count", "libreoffice", "documents"]
+}

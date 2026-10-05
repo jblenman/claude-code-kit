@@ -1,0 +1,24 @@
+# call-recorder.conf — copy this file to ~/.config/call-recorder/call-recorder.conf
+# (or to the path in $CALL_RECORDER_CONF) and edit. record-call.sh sources it;
+# transcribe-call.py parses the same shell syntax (quotes, # comments, $HOME and ~
+# expanded). Every key is optional: delete the lines you don't change.
+# Use generic labels, never people's names (pass --left/--right per call instead).
+
+# record-call.sh
+INPUT_DEVICE="CallTap"
+PERSON="call"
+SAMPLE_RATE=48000
+# The aggregate's sub-device order sets the channels: BlackHole 2ch first (c0, c1),
+# mic third (c2). If the mic is first, use "pan=stereo|c0=c0|c1=0.5*c1+0.5*c2".
+CHANNEL_MAP="pan=stereo|c0=c2|c1=0.5*c0+0.5*c1"
+
+# Shared: recordings folder (record-call.sh) and transcript folder
+# (transcribe-call.py). Keep it outside cloud-synced folders.
+OUTPUT_DIR="$HOME/Recordings/calls"
+
+# transcribe-call.py
+# WHISPER_BIN="/opt/homebrew/bin/whisper-cli"   # default: whisper-cli on PATH
+WHISPER_MODEL="$HOME/Models/whisper/ggml-large-v3-turbo-q5_0.bin"
+LEFT_NAME="Me"
+RIGHT_NAME="Caller"
+LANGUAGE="auto"

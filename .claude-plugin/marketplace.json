@@ -10,21 +10,164 @@
       "source": "./plugins/request-guard",
       "description": "Every request to a public website counted and spaced (PreToolUse on Bash, PowerShell, WebFetch and browser navigation; back-off on 403/429/503), plus a paced fetcher and the fetch-paced skill.",
       "category": "guardrails",
-      "tags": ["hooks", "rate-limit", "web-requests"]
+      "tags": [
+        "hooks",
+        "rate-limit",
+        "web-requests"
+      ]
     },
     {
       "name": "session-guard",
       "source": "./plugins/session-guard",
       "description": "Keeps a session-notes file fresh: a Stop hook blocks a tool-using turn once while the notes are stale, untouched or missing; PreCompact records compactions. Includes the session-notes skill.",
       "category": "guardrails",
-      "tags": ["hooks", "session-notes", "compaction"]
+      "tags": [
+        "hooks",
+        "session-notes",
+        "compaction"
+      ]
     },
     {
       "name": "action-guard",
       "source": "./plugins/action-guard",
       "description": "Refuses or asks about actions against one web application: writes, protected paths, browser form input and JavaScript on its pages, and listed MCP tools. Policy in a JSON file.",
       "category": "guardrails",
-      "tags": ["hooks", "web-application", "policy"]
+      "tags": [
+        "hooks",
+        "web-application",
+        "policy"
+      ]
+    },
+    {
+      "name": "video-digest",
+      "source": "./plugins/video-digest",
+      "description": "Read an online video without watching it: local Whisper transcript, caption cross-check with numeric disagreements flagged, timestamped keyframes; the skill says when to use it and how to read the report.",
+      "category": "tools",
+      "tags": [
+        "video",
+        "transcription",
+        "whisper",
+        "skill"
+      ]
+    },
+    {
+      "name": "docx-pages",
+      "source": "./plugins/docx-pages",
+      "description": "Page counts for Word documents from a real LibreOffice render, with a --limit check that never passes on an unknown count; measurement only.",
+      "category": "tools",
+      "tags": [
+        "docx",
+        "libreoffice",
+        "skill"
+      ]
+    },
+    {
+      "name": "screenshot",
+      "source": "./plugins/screenshot",
+      "description": "Screenshots and timed bursts on macOS, Windows and Linux, capped at 1800 px, with change detection; the skill reads images in a subagent so they never flood the context.",
+      "category": "tools",
+      "tags": [
+        "screenshot",
+        "skill"
+      ]
+    },
+    {
+      "name": "call-recorder",
+      "source": "./plugins/call-recorder",
+      "description": "Record a call on a Mac as stereo (you left, the other party right, via BlackHole) and get a speaker-labeled whisper.cpp transcript; consent first.",
+      "category": "tools",
+      "tags": [
+        "audio",
+        "transcription",
+        "macos",
+        "skill"
+      ]
+    },
+    {
+      "name": "photos-find",
+      "source": "./plugins/photos-find",
+      "description": "Find a photo in the macOS Photos library by the words Live Text found in it and read them without opening the image; read-only.",
+      "category": "tools",
+      "tags": [
+        "photos",
+        "ocr",
+        "macos",
+        "skill"
+      ]
+    },
+    {
+      "name": "session-forensics",
+      "source": "./plugins/session-forensics",
+      "description": "Find and audit Claude Code transcripts: which session did X, where the context and tokens went, and whether sessions keep a notes file, knowledge base and memory current unasked.",
+      "category": "tools",
+      "tags": [
+        "transcripts",
+        "audit",
+        "skill"
+      ]
+    },
+    {
+      "name": "research-agents",
+      "source": "./plugins/research-agents",
+      "description": "Subagents for research: researcher (paced, sourced findings), verifier (claim-by-claim document check with its own memory), browser-reader (read-only Chrome) and frame-reader (images in, text out).",
+      "category": "agents",
+      "tags": [
+        "subagents",
+        "research",
+        "verification"
+      ]
+    },
+    {
+      "name": "inbox-monitor",
+      "source": "./plugins/inbox-monitor",
+      "description": "A plugin monitor that streams ntfy messages (optional HMAC check) or new lines of a file into an interactive session, one notification per event.",
+      "category": "monitors",
+      "tags": [
+        "monitor",
+        "ntfy",
+        "notifications"
+      ]
+    },
+    {
+      "name": "kb-mcp",
+      "source": {
+        "source": "github",
+        "repo": "jblenman/kb-mcp",
+        "ref": "v1.0.1",
+        "sha": "1d5b5199b801c3951f5282eb184659f1c2d8b1c9"
+      },
+      "description": "A local, private knowledge-base MCP server over your own folders of Markdown and text notes: kb_search, kb_get, kb_recent, kb_reindex, kb_status over a SQLite index (BM25 via FTS5, optional Ollama embeddings, adaptive rank fusion) that refreshes itself. Stdlib Python 3.8+.",
+      "version": "1.0.1",
+      "homepage": "https://github.com/jblenman/kb-mcp",
+      "license": "MIT",
+      "category": "knowledge",
+      "tags": [
+        "knowledge-base",
+        "notes",
+        "search",
+        "rag",
+        "mcp",
+        "markdown"
+      ]
+    },
+    {
+      "name": "hivemind",
+      "source": {
+        "source": "github",
+        "repo": "jblenman/hivemind",
+        "ref": "v0.2.0",
+        "sha": "c5d2d066a5da48b14c33647c8599ea5978224e6b"
+      },
+      "description": "Your Ollama models as Claude Code tools: health, list_models, ask_local, route (quick/interactive/quality tiers with fallback) and embed, from a stdlib MCP server. Local-model output is advisory.",
+      "version": "0.2.0",
+      "homepage": "https://github.com/jblenman/hivemind",
+      "license": "MIT",
+      "category": "local-models",
+      "tags": [
+        "ollama",
+        "mcp",
+        "local-models"
+      ]
     }
   ]
 }

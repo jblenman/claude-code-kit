@@ -1,0 +1,10 @@
+{
+  "name": "call-recorder",
+  "version": "0.1.0",
+  "description": "Record a FaceTime, phone or other call on a Mac as one stereo file (your microphone left, the other party right, through a BlackHole loopback) and turn it into a speaker-labeled transcript with whisper.cpp run per channel, so the labels come from the wiring, not from guessing. macOS only; the skill puts consent first.",
+  "author": {
+    "name": "claude-code-kit"
+  },
+  "license": "MIT",
+  "keywords": ["audio", "calls", "transcript", "whisper", "macos"]
+}
