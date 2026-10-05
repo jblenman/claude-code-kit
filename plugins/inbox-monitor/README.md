@@ -128,7 +128,7 @@ Create a key once: `mkdir -p ~/.config/inbox-monitor && python3 -c "import secre
 
 4. The log: `tail ~/.claude/inbox-monitor/monitor.log` shows `START session=<id> … source=…`, one `DELIVER …` per line handed to the model, `DROP … sig=…` for refused messages, and `stream error … reconnecting in Ns` while the server is unreachable.
 
-The offline test suite: `python3 <plugin>/tests/test_inbox_monitor.py` (59 checks, about 45 seconds; uses a stand-in ntfy server on 127.0.0.1 and a temporary state folder).
+The offline test suite: `python3 <plugin>/tests/test_inbox_monitor.py` (60 checks, about 45 seconds; uses a stand-in ntfy server on 127.0.0.1 and a temporary state folder).
 
 ## How Claude Code runs a plugin monitor
 

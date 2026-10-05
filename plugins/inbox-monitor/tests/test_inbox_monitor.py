@@ -139,6 +139,25 @@ def main():
     # ---- pure functions
     os.environ["INBOX_STATE"] = str(state)
     mod = load_module()
+
+    # ---- log rotation while the handle stays open for the whole session
+    mod.LOG_MAX = 2000
+    for i in range(60):
+        mod.log("rotation probe line %02d " % i + "x" * 80)
+    rotated = (state / "monitor.log.1").exists()
+    check("monitor.log rotates during a long-lived process (not only at open)",
+          rotated and log_path.stat().st_size < 2400, "rotated=%s" % rotated)
+    try:
+        mod._log_fh.close()
+    except Exception:
+        pass
+    mod._log_fh = None
+    mod.LOG_MAX = 2 * 1024 * 1024
+    for f in (log_path, state / "monitor.log.1"):
+        try:
+            f.unlink()
+        except OSError:
+            pass
     ev = {"id": "abc123", "topic": "alerts", "title": "ci/build", "message": "line one\r\n  line two  \n\nthree"}
     line = mod.render_ntfy(ev, "valid")
     check("render_ntfy format", line == "[inbox] from=ci/build topic=alerts sig=valid id=abc123 :: line one | line two | three", line)

@@ -95,7 +95,23 @@ def _open_log():
     return _log_fh
 
 
+def _rotate_if_needed():
+    """The handle lives as long as the process (a whole session), so the size check at open time
+    is not enough: check before each write and reopen past LOG_MAX (review finding, 2026-10-04)."""
+    global _log_fh
+    fh = _log_fh
+    if fh is None or fh is sys.__stderr__:
+        return
+    try:
+        if fh.tell() > LOG_MAX:
+            fh.close()
+            _log_fh = None
+    except (OSError, ValueError):
+        _log_fh = None
+
+
 def log(msg):
+    _rotate_if_needed()
     fh = _open_log()
     try:
         fh.write(time.strftime("%Y-%m-%d %H:%M:%S ") + "inbox[%d] " % os.getpid() + msg.replace("\n", " | ") + "\n")

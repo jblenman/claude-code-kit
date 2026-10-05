@@ -1,10 +1,16 @@
 {
   "name": "inbox-monitor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A plugin monitor that streams outside events into an interactive Claude Code session, one notification line per event: messages from ntfy topics (optional HMAC signature check) or new lines of a local file. Reconnects with backoff, ends with its session, idles when INBOX_LISTEN=off.",
   "author": {
     "name": "claude-code-kit"
   },
   "license": "MIT",
-  "keywords": ["monitor", "ntfy", "notifications", "events", "inbox"]
+  "keywords": [
+    "monitor",
+    "ntfy",
+    "notifications",
+    "events",
+    "inbox"
+  ]
 }
